@@ -1,4 +1,4 @@
-# Git Branch Workflow — Short Guide
+# Git Branch Workflow — Short Guide Summary 
 
 ## Branch Structure
 
