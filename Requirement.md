@@ -19,6 +19,7 @@ GitHub Repository:
   - `sahil`
   - `manish`
   - `bhavesh`
+  - `divyam`
 
 **Do not directly develop on `main`.**
 
@@ -31,7 +32,7 @@ Open VS Code (or another Git-enabled IDE) and open the terminal.
 Clone the repository:
 
 ```bash
-git clone https://github.com/sahil-chand-21/lease-project.git
+git clone https://github.com/sahil-chand-21/govt-project.git
 ```
 
 Enter the project:
