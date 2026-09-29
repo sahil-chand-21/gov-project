@@ -38,7 +38,7 @@ git clone https://github.com/sahil-chand-21/govt-project.git
 Enter the project:
 
 ```bash
-cd lease-project
+cd govt-project
 ```
 
 Check the remote:
