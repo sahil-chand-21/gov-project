@@ -17,12 +17,12 @@ changes
 
 ## New Member / New Branch
 
-Create the personal branch from the latest `changes`:
+Create the personal branch from the latest `devlop`:
 
 ```bash
 git fetch origin
-git checkout changes
-git pull origin changes
+git checkout devlop
+git pull origin devlop
 git checkout -b manish
 git push -u origin manish
 ```
