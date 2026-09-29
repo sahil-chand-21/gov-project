@@ -78,7 +78,7 @@ compare: manish
 
 After review/approval, merge the PR into `changes`.
 
-## Important Rules
+## Important Rules (Guidelines)
 
 1. Do not directly push personal work to `main`.
 2. Do not directly push personal work to `changes` if team review is required.
