@@ -17,12 +17,12 @@ changes
 
 ## New Member / New Branch
 
-Create the personal branch from the latest `changes`:
+Create the personal branch from the latest `devlop`:
 
 ```bash
 git fetch origin
-git checkout changes
-git pull origin changes
+git checkout devlop
+git pull origin devlop
 git checkout -b manish
 git push -u origin manish
 ```
@@ -78,7 +78,7 @@ compare: manish
 
 After review/approval, merge the PR into `changes`.
 
-## Important Rules
+## Important Rules (Guidelines)
 
 1. Do not directly push personal work to `main`.
 2. Do not directly push personal work to `changes` if team review is required.
