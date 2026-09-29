@@ -8,7 +8,7 @@ This file explains how every team member should connect the repository to their 
 
 GitHub Repository:
 
-`https://github.com/sahil-chand-21/lease-project`
+`https://github.com/sahil-chand-21/govt-project`
 
 ### Main team branches
 
