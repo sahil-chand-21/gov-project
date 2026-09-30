@@ -46,12 +46,12 @@ export function Navbar() {
     <>
       <header
         className={cn(
-          "w-full sticky top-0 z-50 bg-[#0B1B36] border-t border-white/5 transition-all duration-300",
+          "w-full sticky top-0 z-50 bg-primary-navy border-t border-white/5 transition-all duration-300",
           isScrolled ? "shadow-[0_8px_30px_rgb(0,0,0,0.6)]" : ""
         )}
       >
         {/* Top Edge Subtle Glow */}
-        <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-blue-400/20 to-transparent z-10"></div>
+        <div className="absolute top-0 inset-x-0 h-px bg-linear-to-r from-transparent via-blue-400/20 to-transparent z-10"></div>
 
         <nav
           className={cn(
@@ -64,7 +64,7 @@ export function Navbar() {
             className="flex items-center gap-2 sm:gap-3 cursor-pointer group"
             onClick={() => router.push("/")}
           >
-            <div className="relative flex-shrink-0">
+            <div className="relative shrink-0">
               <div className="absolute inset-0 bg-white/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
               <Image
                 src={ukLogo}
@@ -102,7 +102,7 @@ export function Navbar() {
           <div className="flex items-center gap-4">
             <Button
               borderRadius="2rem"
-              className="bg-[#F97316] text-white text-[10px] font-bold tracking-widest uppercase hover:bg-[#EA580C] transition-colors border-none"
+              className="bg-orange text-white text-[10px] font-bold tracking-widest uppercase hover:bg-[#EA580C] transition-colors border-none"
               containerClassName="hidden sm:block h-9 w-28 shadow-lg shadow-orange/20"
               onClick={() => router.push("/login")}
             >
@@ -112,13 +112,13 @@ export function Navbar() {
             {/* Animated Tricolor Hamburger Menu Button (Mobile/Tablet Only) */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="lg:hidden flex flex-col justify-center items-center gap-[4px] w-8 h-8 focus:outline-none z-50 relative"
+              className="lg:hidden flex flex-col justify-center items-center gap-1 w-8 h-8 focus:outline-none z-50 relative"
               aria-label="Toggle menu"
             >
               <span
                 className={cn(
                   "block w-5 h-0.5 rounded-full transition-all duration-300 ease-out bg-[#FF9933]",
-                  isMenuOpen ? "rotate-45 translate-y-[6px]" : ""
+                  isMenuOpen ? "rotate-45 translate-y-1.5" : ""
                 )}
               />
               <span
@@ -130,7 +130,7 @@ export function Navbar() {
               <span
                 className={cn(
                   "block w-5 h-0.5 rounded-full transition-all duration-300 ease-out bg-[#138808]",
-                  isMenuOpen ? "-rotate-45 -translate-y-[6px]" : ""
+                  isMenuOpen ? "-rotate-45 -translate-y-1.5" : ""
                 )}
               />
             </button>
@@ -141,7 +141,7 @@ export function Navbar() {
       {/* Mobile Drawer Backdrop */}
       {isMenuOpen && (
         <div
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] lg:hidden transition-opacity duration-300"
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-60 lg:hidden transition-opacity duration-300"
           onClick={() => setIsMenuOpen(false)}
         />
       )}
@@ -149,7 +149,7 @@ export function Navbar() {
       {/* Mobile Drawer (Slides in from right) */}
       <div
         className={cn(
-          "fixed top-0 right-0 h-full w-64 sm:w-80 bg-[#0B1B36] border-l border-white/10 shadow-2xl z-[70] transform transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] lg:hidden flex flex-col",
+          "fixed top-0 right-0 h-full w-64 sm:w-80 bg-primary-navy border-l border-white/10 shadow-2xl z-70 transform transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] lg:hidden flex flex-col",
           isMenuOpen ? "translate-x-0" : "translate-x-full"
         )}
       >
@@ -180,11 +180,11 @@ export function Navbar() {
               </Link>
             ))}
           </div>
-          
+
           <div className="mt-auto pt-8 border-t border-white/10">
             <Button
               borderRadius="2rem"
-              className="bg-[#0B1B36] text-white text-xs font-bold tracking-widest uppercase hover:bg-[#152A52]"
+              className="bg-primary-navy text-white text-xs font-bold tracking-widest uppercase hover:bg-[#152A52]"
               containerClassName="h-10 w-full shadow-lg shadow-blue-900/20"
               onClick={() => {
                 setIsMenuOpen(false);

@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Manrope, Noto_Serif_Devanagari, Noto_Sans_Devanagari } from "next/font/google";
 import "./globals.css";
-import { TopHeader } from "../src/components/TopHeader";
-import { Navbar } from "../src/components/Navbar";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -27,8 +25,8 @@ const notoSansDevanagari = Noto_Sans_Devanagari({
 });
 
 export const metadata: Metadata = {
-  title: "Revenue Collection Portal",
-  description: "Bilingual Government Revenue Collection Portal",
+  title: "Almora Zila Panchayat - Revenue & Rental Management System",
+  description: "Official Bilingual Portal for Almora Zila Panchayat Property & Rental Management",
 };
 
 export default function RootLayout({
@@ -41,9 +39,7 @@ export default function RootLayout({
       lang="en"
       className={`${inter.variable} ${manrope.variable} ${notoSerifDevanagari.variable} ${notoSansDevanagari.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-white" suppressHydrationWarning>
-        <TopHeader />
-        <Navbar />
+      <body className="min-h-full flex flex-col bg-slate-50 text-slate-900" suppressHydrationWarning>
         {children}
       </body>
     </html>
