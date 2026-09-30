@@ -41,7 +41,7 @@ export default function RootLayout({
       lang="en"
       className={`${inter.variable} ${manrope.variable} ${notoSerifDevanagari.variable} ${notoSansDevanagari.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-white">
+      <body className="min-h-full flex flex-col bg-white" suppressHydrationWarning>
         <TopHeader />
         <Navbar />
         {children}
