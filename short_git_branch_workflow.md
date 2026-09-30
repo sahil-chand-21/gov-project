@@ -1,4 +1,4 @@
-# Git Branch Workflow — Short Guide
+# Git Branch Workflow — Short Guide Summary 
 
 ## Branch Structure
 
@@ -23,8 +23,8 @@ Create the personal branch from the latest `devlop`:
 git fetch origin
 git checkout devlop
 git pull origin devlop
-git checkout -b manish
-git push -u origin manish
+git checkout -b Deepak
+git push -u origin Deepak 
 ```
 
 ## Daily Work
@@ -32,7 +32,7 @@ git push -u origin manish
 Work on your own branch:
 
 ```bash
-git checkout manish
+git checkout Deepak 
 ```
 
 After making changes:
