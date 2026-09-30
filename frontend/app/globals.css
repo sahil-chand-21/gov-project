@@ -36,12 +36,27 @@
     --charcoal: #1F2937;
   }
 
-  * {
-    @apply border-border;
-  }
-  
   body {
-    @apply bg-background text-charcoal;
     font-family: var(--font-body-en), var(--font-body-hi), sans-serif;
   }
+}
+
+/* Scrollbar utilities */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.3);
+  border-radius: 4px;
 }

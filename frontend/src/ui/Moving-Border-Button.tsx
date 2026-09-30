@@ -22,17 +22,17 @@ export function Button({
 }: {
   borderRadius?: string;
   children: React.ReactNode;
-  as?: any;
+  as?: React.ElementType;
   containerClassName?: string;
   borderClassName?: string;
   duration?: number;
   className?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }) {
   return (
     <Component
       className={cn(
-        "relative overflow-hidden bg-transparent p-[1px] text-xl",
+        "relative overflow-hidden bg-transparent p-px text-xl",
         containerClassName,
       )}
       style={{
@@ -47,7 +47,7 @@ export function Button({
         <MovingBorder duration={duration} rx="30%" ry="30%">
           <div
             className={cn(
-              "h-20 w-20 bg-[radial-gradient(#0ea5e9_40%,transparent_60%)] opacity-[0.8]",
+              "h-20 w-20 bg-[radial-gradient(#0ea5e9_40%,transparent_60%)] opacity-80",
               borderClassName,
             )}
           />
@@ -56,7 +56,7 @@ export function Button({
 
       <div
         className={cn(
-          "relative flex h-full w-full items-center justify-center border border-slate-800 bg-slate-900/[0.8] text-sm text-white antialiased backdrop-blur-xl",
+          "relative flex h-full w-full items-center justify-center border border-slate-800 bg-slate-900/80 text-sm text-white antialiased backdrop-blur-xl",
           className,
         )}
         style={{
@@ -80,9 +80,9 @@ export const MovingBorder = ({
   duration?: number;
   rx?: string;
   ry?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }) => {
-  const pathRef = useRef<any>(null);
+  const pathRef = useRef<SVGRectElement | null>(null);
   const progress = useMotionValue<number>(0);
 
   useAnimationFrame((time: number) => {
@@ -99,7 +99,7 @@ export const MovingBorder = ({
       if (pathRef.current && length && length > 0) {
         return pathRef.current.getPointAtLength(val).x;
       }
-    } catch (e) {
+    } catch {
       // Ignore empty path error on initial mount
     }
     return 0;
@@ -111,7 +111,7 @@ export const MovingBorder = ({
       if (pathRef.current && length && length > 0) {
         return pathRef.current.getPointAtLength(val).y;
       }
-    } catch (e) {
+    } catch {
       // Ignore empty path error on initial mount
     }
     return 0;
@@ -145,7 +145,7 @@ export const MovingBorder = ({
           left: 0,
           display: "inline-block",
           transform,
-        } as any}
+        }}
       >
         {children}
       </motion.div>
