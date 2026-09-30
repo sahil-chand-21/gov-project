@@ -1,4 +1,4 @@
-# Git Branch Workflow — Short Guide
+# Git Branch Workflow — Short Guide Summary 
 
 ## Branch Structure
 
@@ -23,8 +23,8 @@ Create the personal branch from the latest `devlop`:
 git fetch origin
 git checkout devlop
 git pull origin devlop
-git checkout -b manish
-git push -u origin manish
+git checkout -b Deepak
+git push -u origin Deepak 
 ```
 
 ## Daily Work
@@ -32,7 +32,7 @@ git push -u origin manish
 Work on your own branch:
 
 ```bash
-git checkout manish
+git checkout Deepak 
 ```
 
 After making changes:
@@ -85,3 +85,5 @@ After review/approval, merge the PR into `changes`.
 3. Keep your own work on your personal branch.
 4. Before starting/continuing work, bring the latest `changes` into your branch.
 5. Approval is required for merging a Pull Request, not for every `git push`.
+
+
