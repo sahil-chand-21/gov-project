@@ -91,22 +91,34 @@ export function TopHeader() {
 
   return (
     <div className="relative z-60 bg-transparent text-charcoal px-4 py-1.5 text-[10px] border-b-2 border-orange font-body-en">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-3">
+      <div className="max-w-8xl mx-auto flex flex-col md:flex-row justify-between items-center gap-3">
 
-        {/* Left Side: 3 Logos */}
-        <div className="flex items-center justify-center gap-3 sm:gap-4 flex-wrap">
-          <a href="#" className="hover:opacity-80 transition-opacity flex items-center">
-            <Image src={logo5} alt="Logo 5" className="h-9 w-auto object-contain" />
+        {/* Left Side: Logos */}
+        <div className="flex items-center justify-center gap-4 sm:gap-6 flex-wrap">
+          <a href="#" className="hover:opacity-80 transition-opacity flex items-center mr-2">
+            <Image src={logo5} alt="Logo 5" className="h-12 sm:h-14 w-auto object-contain" />
+            <div className="flex flex-col justify-center text-left">
+              <span className="text-[10px] sm:text-[12px] font-medium text-charcoal leading-[1.1]">
+                Department of
+              </span>
+              <span className="text-[11px] sm:text-[13px] font-bold text-charcoal leading-[1.1]">
+                Panchayati Raj
+              </span>
+              <span className="text-[10px] sm:text-[11px] font-medium text-charcoal leading-[1.1] mt-0.5">
+                Government of Uttarakhand
+              </span>
+            </div>
           </a>
           <a href="#" className="hover:opacity-80 transition-opacity flex items-center">
-            <Image src={logo1} alt="Logo 1" className="h-9 w-auto object-contain" />
+            <Image src={logo1} alt="Logo 1" className="h-12 sm:h-14 w-auto object-contain" />
+          </a>
+            <a href="#" className="hover:opacity-80 transition-opacity flex items-center">
+            <Image src={logo4} alt="Logo 4" className="h-12 sm:h-14 w-auto object-contain" />
           </a>
           <a href="#" className="hover:opacity-80 transition-opacity flex items-center">
-            <Image src={logo3} alt="Logo 3" className="h-9 w-auto object-contain" />
+            <Image src={logo3} alt="Logo 3" className="h-12 sm:h-14 w-auto object-contain" />
           </a>
-          <a href="#" className="hover:opacity-80 transition-opacity flex items-center">
-            <Image src={logo4} alt="Logo 4" className="h-9 w-auto object-contain" />
-          </a>
+        
 
         </div>
 
