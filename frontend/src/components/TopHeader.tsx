@@ -2,9 +2,10 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import logo1 from "../../assests/logo1.png";
-import logo3 from "../../assests/logo3.png";
-import logo4 from "../../assests/logo4.png";
+import logo1 from "@/assets/logo1.png";
+import logo3 from "@/assets/logo3.png";
+import logo4 from "@/assets/logo4.png";
+import logo5 from "@/assets/logo5.png";
 import { FaCalendarAlt, FaChevronLeft, FaChevronRight, FaPhoneAlt } from "react-icons/fa";
 import { HiMiniLanguage } from "react-icons/hi2";
 
@@ -36,21 +37,21 @@ export function TopHeader() {
     "10-19": "Igas Bagwal",
     "11-25": "Christmas",
   };
-  
+
   // Real current date (for today highlight and formatted display)
   const today = new Date();
-  const options: Intl.DateTimeFormatOptions = { 
-    weekday: 'short', 
-    year: 'numeric', 
-    month: 'short', 
-    day: 'numeric' 
+  const options: Intl.DateTimeFormatOptions = {
+    weekday: 'short',
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
   };
   const formattedDate = today.toLocaleDateString('en-US', options);
 
   // Calendar logic based on viewDate
   const currentMonth = viewDate.toLocaleString('default', { month: 'long' });
   const currentYear = viewDate.getFullYear();
-  
+
   const firstDayOfMonth = new Date(currentYear, viewDate.getMonth(), 1).getDay();
   const daysInMonth = new Date(currentYear, viewDate.getMonth() + 1, 0).getDate();
 
@@ -89,11 +90,14 @@ export function TopHeader() {
   }, []);
 
   return (
-    <div className="relative z-[60] bg-transparent text-charcoal px-4 py-1.5 text-[10px] border-b-2 border-orange font-body-en">
+    <div className="relative z-60 bg-transparent text-charcoal px-4 py-1.5 text-[10px] border-b-2 border-orange font-body-en">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-3">
-        
+
         {/* Left Side: 3 Logos */}
         <div className="flex items-center justify-center gap-3 sm:gap-4 flex-wrap">
+          <a href="#" className="hover:opacity-80 transition-opacity flex items-center">
+            <Image src={logo5} alt="Logo 5" className="h-9 w-auto object-contain" />
+          </a>
           <a href="#" className="hover:opacity-80 transition-opacity flex items-center">
             <Image src={logo1} alt="Logo 1" className="h-9 w-auto object-contain" />
           </a>
@@ -103,11 +107,12 @@ export function TopHeader() {
           <a href="#" className="hover:opacity-80 transition-opacity flex items-center">
             <Image src={logo4} alt="Logo 4" className="h-9 w-auto object-contain" />
           </a>
+
         </div>
 
         {/* Right Side: Toll-Free, Date, Calendar, and Language Toggle */}
         <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6">
-          
+
           {/* Toll Free Number */}
           <a href="tel:18001802345" className="flex items-center gap-1.5 font-bold text-charcoal/80 hover:text-orange transition-colors group">
             <div className="bg-charcoal/5 group-hover:bg-orange/10 p-1.5 rounded-full text-orange transition-colors">
@@ -118,7 +123,7 @@ export function TopHeader() {
 
           {/* Calendar Toggle */}
           <div className="relative" ref={calendarRef}>
-            <button 
+            <button
               onClick={() => setIsCalendarOpen(!isCalendarOpen)}
               className="flex items-center gap-2 text-charcoal/90 hover:text-orange transition-colors focus:outline-none cursor-pointer"
             >
@@ -131,14 +136,14 @@ export function TopHeader() {
             {/* Designed Calendar Dropdown */}
             {isCalendarOpen && (
               <div className="absolute right-0 top-full mt-3 w-64 bg-white rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.12)] border border-gray-100 overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200">
-                
+
                 {/* Calendar Header */}
                 <div className="bg-primary-navy p-3 flex items-center justify-between text-white shadow-inner">
                   <button onClick={handlePrevMonth} className="p-1.5 hover:bg-white/10 rounded-full transition-colors"><FaChevronLeft size={10} /></button>
                   <span className="font-semibold text-[11px] tracking-widest uppercase">{currentMonth} {currentYear}</span>
                   <button onClick={handleNextMonth} className="p-1.5 hover:bg-white/10 rounded-full transition-colors"><FaChevronRight size={10} /></button>
                 </div>
-                
+
                 {/* Calendar Body */}
                 <div className="p-4">
                   <div className="grid grid-cols-7 gap-1 text-center text-[9px] font-bold tracking-wider text-gray-400 uppercase mb-3">
@@ -150,20 +155,20 @@ export function TopHeader() {
                       <div key={`blank-${i}`} />
                     ))}
                     {/* Actual days */}
-                    {Array.from({length: daysInMonth}, (_, i) => i + 1).map((day, index) => {
+                    {Array.from({ length: daysInMonth }, (_, i) => i + 1).map((day, index) => {
                       const isToday = isCurrentMonth && day === currentDay;
                       const isSunday = (firstDayOfMonth + index) % 7 === 0;
                       const festivalName = festivals[`${viewDate.getMonth()}-${day}`];
                       const isFestival = !!festivalName;
-                      
+
                       let dayColorClass = 'text-gray-700';
                       if (isToday) dayColorClass = 'bg-orange text-white shadow-md shadow-orange/30';
                       else if (isFestival) dayColorClass = 'text-green-600 bg-green-50 font-bold';
                       else if (isSunday) dayColorClass = 'text-red-500 font-bold';
 
                       return (
-                        <div 
-                          key={day} 
+                        <div
+                          key={day}
                           title={festivalName || (isSunday ? "Sunday" : "")}
                           className={`h-7 w-7 mx-auto rounded-full flex items-center justify-center transition-all cursor-pointer ${dayColorClass} ${!isToday && !isFestival ? 'hover:bg-gray-100' : ''}`}
                         >
@@ -183,7 +188,7 @@ export function TopHeader() {
                         {monthFestivals.map(f => (
                           <div key={f.day} className="flex justify-between items-center bg-gray-50 px-2 py-1 rounded">
                             <span className="font-medium text-gray-700">{f.name}</span>
-                            <span className="font-bold text-green-600">{f.day} {currentMonth.substring(0,3)}</span>
+                            <span className="font-bold text-green-600">{f.day} {currentMonth.substring(0, 3)}</span>
                           </div>
                         ))}
                       </div>
@@ -195,8 +200,8 @@ export function TopHeader() {
               </div>
             )}
           </div>
-          
-          <button 
+
+          <button
             onClick={toggleLanguage}
             className="flex items-center gap-2 bg-primary-navy hover:bg-primary-navy/80 border border-white/10 px-3 py-1 rounded transition-colors focus:outline-none focus:ring-1 focus:ring-orange shadow-sm"
           >
@@ -205,7 +210,7 @@ export function TopHeader() {
               {lang === "en" ? "हिंदी" : "English"}
             </span>
           </button>
-          
+
         </div>
 
       </div>
