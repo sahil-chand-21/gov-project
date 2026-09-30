@@ -1,4 +1,4 @@
-# Git & GitHub Team Workflow — Lease Project
+# Git & GitHub Team Workflow — Govt project 
 
 This file explains how every team member should connect the repository to their IDE, create and use branches, pull updates, commit changes, and push code safely.
 
@@ -8,7 +8,7 @@ This file explains how every team member should connect the repository to their 
 
 GitHub Repository:
 
-`https://github.com/sahil-chand-21/lease-project`
+`https://github.com/sahil-chand-21/govt-project`
 
 ### Main team branches
 
@@ -19,6 +19,7 @@ GitHub Repository:
   - `sahil`
   - `manish`
   - `bhavesh`
+  - `divyam`
 
 **Do not directly develop on `main`.**
 
@@ -31,13 +32,13 @@ Open VS Code (or another Git-enabled IDE) and open the terminal.
 Clone the repository:
 
 ```bash
-git clone https://github.com/sahil-chand-21/lease-project.git
+git clone https://github.com/sahil-chand-21/govt-project.git
 ```
 
 Enter the project:
 
 ```bash
-cd lease-project
+cd govt-project
 ```
 
 Check the remote:
