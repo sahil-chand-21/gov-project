@@ -35,11 +35,23 @@ export default function LoginPage() {
     const SUPER_ADMIN_MOBILE = "9876543210";
     const SUPER_ADMIN_PASS = "admin123";
 
-    // Function to autofill test credentials
+    // Preset Tenant credentials for testing
+    const TENANT_MOBILE = "9456712345";
+    const TENANT_PASS = "user123";
+
+    // Function to autofill admin test credentials
     const autoFillSuperAdmin = () => {
         setLoginMode("admin");
         setIdentifier(SUPER_ADMIN_MOBILE);
         setPassword(SUPER_ADMIN_PASS);
+        setErrorMsg("");
+    };
+
+    // Function to autofill tenant test credentials
+    const autoFillTenant = () => {
+        setLoginMode("user");
+        setIdentifier(TENANT_MOBILE);
+        setPassword(TENANT_PASS);
         setErrorMsg("");
     };
 
@@ -58,8 +70,24 @@ export default function LoginPage() {
         setTimeout(() => {
             setIsLoading(false);
 
+            // --- TENANT LOGIN: check tenant credentials FIRST (works on any tab) ---
+            if (
+                loginMode === "user" ||
+                identifier === TENANT_MOBILE
+            ) {
+                setSuccessMsg("किराएदार लॉगिन सफल! किराएदार पोर्टल पर ले जाया जा रहा है...");
+                if (typeof window !== "undefined") {
+                    localStorage.setItem("userRole", "TENANT");
+                    localStorage.setItem("userName", identifier === TENANT_MOBILE ? "रमेश चंद्र जोशी" : identifier);
+                }
+                setTimeout(() => {
+                    router.push("/user");
+                }, 800);
+                return;
+            }
+
+            // --- ADMIN LOGIN ---
             if (loginMode === "admin") {
-                // Validation for Super Admin demo
                 if (
                     identifier === SUPER_ADMIN_MOBILE ||
                     identifier.toLowerCase() === "admin" ||
@@ -80,7 +108,7 @@ export default function LoginPage() {
                         return;
                     }
                 } else {
-                    // Allow flexible login for testing
+                    // Allow flexible admin login for testing
                     setSuccessMsg("प्रशासनिक लॉगिन सफल! रिडायरेक्ट किया जा रहा है...");
                     if (typeof window !== "undefined") {
                         localStorage.setItem("userRole", "SUB_ADMIN");
@@ -90,12 +118,6 @@ export default function LoginPage() {
                         router.push("/admin");
                     }, 800);
                 }
-            } else {
-                // User/Tenant login mode
-                setSuccessMsg("किराएदार लॉगिन सफल! प्रशासनिक डैशबोर्ड पर ले जाया जा रहा है...");
-                setTimeout(() => {
-                    router.push("/admin");
-                }, 1000);
             }
         }, 600);
     };
@@ -146,6 +168,35 @@ export default function LoginPage() {
                             >
                                 <IconCheck className="h-4 w-4" />
                                 सुपर एडमिन लॉगिन स्वतः भरें (Auto-Fill Credentials)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Testing Tenant Banner */}
+                <div className="p-3.5 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 backdrop-blur-md shadow-lg text-emerald-100">
+                    <div className="flex items-start gap-3">
+                        <div className="p-2 rounded-xl bg-emerald-500/20 text-emerald-300 shrink-0 mt-0.5">
+                            <IconUser className="h-4 w-4" />
+                        </div>
+                        <div className="flex-1 text-xs">
+                            <div className="font-bold text-emerald-300 text-xs flex items-center justify-between">
+                                <span>किराएदार / Tenant — त्वरित परीक्षण क्रेडेंशियल</span>
+                                <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/30 text-emerald-200 font-mono">
+                                    TENANT DEMO
+                                </span>
+                            </div>
+                            <div className="mt-1 font-mono flex flex-wrap gap-x-4 text-[11px] text-emerald-100/90">
+                                <span>मोबाइल: <strong className="text-white font-semibold">{TENANT_MOBILE}</strong></span>
+                                <span>पासवर्ड: <strong className="text-white font-semibold">{TENANT_PASS}</strong></span>
+                            </div>
+                            <button
+                                type="button"
+                                onClick={autoFillTenant}
+                                className="mt-2 w-full py-1.5 px-3 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition shadow-sm flex items-center justify-center gap-1.5 cursor-pointer"
+                            >
+                                <IconCheck className="h-4 w-4" />
+                                किराएदार लॉगिन स्वतः भरें (Auto-Fill Tenant)
                             </button>
                         </div>
                     </div>
