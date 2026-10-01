@@ -9,13 +9,14 @@ const pool = new Pool({
 });
 async function getdata(){
 
-  const res= await client.query(` insert into public.admin_register(admin_id,password) values('admin21','admin123')`);
+  const res= await client.query("select * from admin_register");
   for(let i=0;i<res.length;i++){
     console.log(res.rows[i].admin_id);
     const data = {admin_id:res.rows[i].password};
+    console.log(data);
   }
 
-}
+} 
 getdata();
 
 export default pool;

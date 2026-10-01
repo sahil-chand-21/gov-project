@@ -25,6 +25,16 @@ client.query("select * from admin_register", (err, res) => {
     else {
         console.log(err.message);
     }
-    client.end();
+   
+
+    client.query("select * from user_login", (err, res) => {
+        if (!err) {
+            console.log(res.rows);
+        }
+        else {
+            console.log(err.message);
+        }
+        client.end();
+    });
 });
 module.exports = { client }
