@@ -3,22 +3,24 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { Button } from "../ui/Moving-Border-Button";
 import ukLogo from "@/assets/logo2.png";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
-  { name: "Home", href: "/" },
-  { name: "About Us", href: "/about" },
-  { name: "Properties", href: "/properties" },
-  { name: "Notices", href: "/notices" },
-  { name: "Documents", href: "/documents" },
-  { name: "Contact", href: "/contact" },
+  { name: "Home", href: "/#hero", sectionId: "hero" },
+  { name: "Services", href: "/#services", sectionId: "services" },
+  { name: "About Us", href: "/#about", sectionId: "about" },
+  { name: "Properties", href: "/#properties", sectionId: "properties" },
+  { name: "Notices", href: "/#notices", sectionId: "notices" },
+  { name: "Documents", href: "/#documents", sectionId: "documents" },
+  { name: "Contact", href: "/#contact", sectionId: "contact" },
 ];
 
 export function Navbar() {
   const router = useRouter();
+  const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -42,64 +44,83 @@ export function Navbar() {
     };
   }, [isMenuOpen]);
 
+  const handleNavClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    sectionId: string
+  ) => {
+    if (pathname === "/") {
+      e.preventDefault();
+      const el = document.getElementById(sectionId);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+    setIsMenuOpen(false);
+  };
+
   return (
     <>
       <header
         className={cn(
-          "w-full sticky top-0 z-50 bg-primary-navy border-t border-white/5 transition-all duration-300",
-          isScrolled ? "shadow-[0_8px_30px_rgb(0,0,0,0.6)]" : ""
+          "w-full sticky top-0 z-50 bg-primary-navy transition-all duration-300",
+          isScrolled ? "shadow-[0_4px_20px_rgba(0,0,0,0.5)]" : ""
         )}
       >
-        {/* Top Edge Subtle Glow */}
-        <div className="absolute top-0 inset-x-0 h-px bg-linear-to-r from-transparent via-blue-400/20 to-transparent z-10"></div>
+        {/* Official Saffron Top Border — India Govt. Style */}
+        <div className="h-1 w-full bg-orange" />
 
         <nav
           className={cn(
-            "relative z-20 max-w-8xl mx-auto px-4 lg:px-8 flex items-center justify-between text-white transition-all duration-300",
-            isScrolled ? "h-14" : "h-20"
+            "max-w-8xl mx-auto px-4 lg:px-8 flex items-center justify-between text-white transition-all duration-300",
+            isScrolled ? "h-12" : "h-16"
           )}
         >
-          {/* Left: Branding */}
+          {/* Left: Official Branding */}
           <div
-            className="flex items-center gap-2 sm:gap-3 cursor-pointer group"
+            className="flex items-center gap-3 cursor-pointer"
             onClick={() => router.push("/")}
           >
-            <div className="relative shrink-0">
-              <div className="absolute inset-0 bg-white/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-              <Image
-                src={ukLogo}
-                alt="Logo"
-                className={cn(
-                  "w-auto object-contain relative z-10 drop-shadow-lg transition-all duration-300",
-                  isScrolled ? "h-8" : "h-10"
-                )}
-              />
-            </div>
-            <div className="flex flex-col justify-center">
-              <span className="font-bold text-[10px] sm:text-xs tracking-normal sm:tracking-wide font-heading-en text-white group-hover:text-blue-200 transition-colors duration-300">
-                DEPARTMENT OF ZILA PANCHAYAT ALMORA
+            <Image
+              src={ukLogo}
+              alt="Uttarakhand Govt. Logo"
+              className={cn(
+                "w-auto object-contain transition-all duration-300",
+                isScrolled ? "h-7" : "h-9"
+              )}
+            />
+            {/* Vertical Divider */}
+            <div className="h-8 w-px bg-white/20 hidden sm:block" />
+            <div className="hidden sm:flex flex-col justify-center leading-tight">
+              <span className="text-[11px] sm:text-xs font-bold tracking-wide text-white uppercase">
+                Zila Panchayat Almora
               </span>
-              <span className="text-[7px] sm:text-[9px] tracking-normal text-orange/90 font-semibold mt-0.5">
-                GOVERNMENT OF UTTARAKHAND
+              <span className="text-[9px] text-white/60 font-medium tracking-wider uppercase">
+                Government of Uttarakhand
               </span>
             </div>
           </div>
 
-          {/* Middle: Premium Links */}
-          <div className="hidden lg:flex items-center gap-1 bg-white/5 p-1.5 rounded-full border border-white/10 backdrop-blur-md shadow-inner">
-            {navLinks.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className="relative px-5 py-1.5 text-xs font-semibold tracking-wider text-white/80 hover:text-white transition-all duration-300 rounded-full hover:bg-white/10 hover:shadow-[0_0_15px_rgba(255,255,255,0.1)]"
-              >
-                {item.name}
-              </Link>
+          {/* Center: Official Navigation Links */}
+          <div className="hidden lg:flex items-center gap-0">
+            {navLinks.map((item, idx) => (
+              <span key={item.name} className="flex items-center">
+                <Link
+                  href={item.href}
+                  onClick={(e) => handleNavClick(e, item.sectionId)}
+                  className="px-3.5 py-1 text-[11px] font-semibold tracking-widest text-white/80 hover:text-white hover:bg-white/8 transition-all duration-200 uppercase"
+                >
+                  {item.name}
+                </Link>
+                {/* Thin separator between links, not after last */}
+                {idx < navLinks.length - 1 && (
+                  <span className="h-3.5 w-px bg-white/20" />
+                )}
+              </span>
             ))}
           </div>
 
-          {/* Right: Actions and Mobile Menu Button */}
-          <div className="flex items-center gap-4">
+          {/* Right: Sign In + Hamburger */}
+          <div className="flex items-center gap-3">
             <Button
               borderRadius="2rem"
               className="bg-orange text-white text-[10px] font-bold tracking-widest uppercase hover:bg-[#EA580C] transition-colors border-none"
@@ -109,91 +130,98 @@ export function Navbar() {
               Sign In
             </Button>
 
-            {/* Animated Tricolor Hamburger Menu Button (Mobile/Tablet Only) */}
+            {/* Hamburger (Mobile/Tablet Only) */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="lg:hidden flex flex-col justify-center items-center gap-1 w-8 h-8 focus:outline-none z-50 relative"
+              className="lg:hidden flex flex-col justify-center items-center gap-1.5 w-8 h-8 focus:outline-none z-50 relative"
               aria-label="Toggle menu"
             >
               <span
                 className={cn(
-                  "block w-5 h-0.5 rounded-full transition-all duration-300 ease-out bg-[#FF9933]",
-                  isMenuOpen ? "rotate-45 translate-y-1.5" : ""
+                  "block w-5 h-px rounded-full transition-all duration-300 ease-out bg-white",
+                  isMenuOpen ? "rotate-45 translate-y-1.75" : ""
                 )}
               />
               <span
                 className={cn(
-                  "block w-5 h-0.5 rounded-full transition-all duration-300 ease-out bg-white",
+                  "block w-5 h-px rounded-full transition-all duration-300 ease-out bg-white",
                   isMenuOpen ? "opacity-0" : "opacity-100"
                 )}
               />
               <span
                 className={cn(
-                  "block w-5 h-0.5 rounded-full transition-all duration-300 ease-out bg-[#138808]",
-                  isMenuOpen ? "-rotate-45 -translate-y-1.5" : ""
+                  "block w-5 h-px rounded-full transition-all duration-300 ease-out bg-white",
+                  isMenuOpen ? "-rotate-45 -translate-y-1.75" : ""
                 )}
               />
             </button>
           </div>
         </nav>
+
+        {/* Official Bottom Separator */}
+        <div className="h-px w-full bg-white/10" />
       </header>
 
       {/* Mobile Drawer Backdrop */}
       {isMenuOpen && (
         <div
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-60 lg:hidden transition-opacity duration-300"
+          className="fixed inset-0 bg-black/60 z-60 lg:hidden"
           onClick={() => setIsMenuOpen(false)}
         />
       )}
 
-      {/* Mobile Drawer (Slides in from right) */}
+      {/* Mobile Drawer */}
       <div
         className={cn(
-          "fixed top-0 right-0 h-full w-64 sm:w-80 bg-primary-navy border-l border-white/10 shadow-2xl z-70 transform transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] lg:hidden flex flex-col",
+          "fixed top-0 right-0 h-full w-64 sm:w-72 bg-primary-navy border-l border-white/10 shadow-2xl z-70 transform transition-transform duration-400 ease-out lg:hidden flex flex-col",
           isMenuOpen ? "translate-x-0" : "translate-x-full"
         )}
       >
-        <div className="flex flex-col h-full p-6">
-          <div className="flex justify-end mb-8">
-            <button
-              onClick={() => setIsMenuOpen(false)}
-              className="text-white/70 hover:text-white p-2"
-            >
-              Close ✕
-            </button>
-          </div>
-          <div className="flex flex-col gap-6">
-            {navLinks.map((item, index) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                onClick={() => setIsMenuOpen(false)}
-                className="text-sm font-bold tracking-widest text-white/80 hover:text-orange transition-colors uppercase"
-                style={{
-                  transitionDelay: isMenuOpen ? `${index * 50}ms` : "0ms",
-                  transform: isMenuOpen ? "translateX(0)" : "translateX(20px)",
-                  opacity: isMenuOpen ? 1 : 0,
-                  transition: "all 0.4s ease-out",
-                }}
-              >
-                {item.name}
-              </Link>
-            ))}
-          </div>
+        {/* Drawer Header */}
+        <div className="h-1 w-full bg-orange" />
+        <div className="flex items-center justify-between px-5 py-4 border-b border-white/10">
+          <span className="text-xs font-bold text-white tracking-widest uppercase">Navigation</span>
+          <button
+            onClick={() => setIsMenuOpen(false)}
+            className="text-white/60 hover:text-white text-lg font-light leading-none focus:outline-none"
+          >
+            ✕
+          </button>
+        </div>
 
-          <div className="mt-auto pt-8 border-t border-white/10">
-            <Button
-              borderRadius="2rem"
-              className="bg-primary-navy text-white text-xs font-bold tracking-widest uppercase hover:bg-[#152A52]"
-              containerClassName="h-10 w-full shadow-lg shadow-blue-900/20"
-              onClick={() => {
-                setIsMenuOpen(false);
-                router.push("/login");
+        {/* Drawer Links */}
+        <div className="flex flex-col flex-1 py-4">
+          {navLinks.map((item, index) => (
+            <Link
+              key={item.name}
+              href={item.href}
+              onClick={(e) => handleNavClick(e, item.sectionId)}
+              className="px-6 py-3 text-xs font-bold tracking-widest text-white/75 hover:text-white hover:bg-white/5 border-b border-white/5 uppercase transition-all"
+              style={{
+                transitionDelay: isMenuOpen ? `${index * 40}ms` : "0ms",
+                transform: isMenuOpen ? "translateX(0)" : "translateX(16px)",
+                opacity: isMenuOpen ? 1 : 0,
+                transition: "all 0.35s ease-out",
               }}
             >
-              Sign In
-            </Button>
-          </div>
+              {item.name}
+            </Link>
+          ))}
+        </div>
+
+        {/* Drawer Footer Sign In */}
+        <div className="px-5 py-5 border-t border-white/10">
+          <Button
+            borderRadius="2rem"
+            className="bg-orange text-white text-xs font-bold tracking-widest uppercase hover:bg-[#EA580C] transition-colors border-none"
+            containerClassName="h-10 w-full shadow-lg shadow-orange/20"
+            onClick={() => {
+              setIsMenuOpen(false);
+              router.push("/login");
+            }}
+          >
+            Sign In
+          </Button>
         </div>
       </div>
     </>
