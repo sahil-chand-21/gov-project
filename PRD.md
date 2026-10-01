@@ -166,7 +166,7 @@ Passwords are never stored in plaintext. **Argon2id** is preferred for hashing; 
 
 ## 7. User Profile Management
 
-**Profile fields:** User ID · Full Name · Father/Husband Name · Mobile Number · Email (if required) · Address · PAN Number · GST Number (optional) · Profile Picture · Property ID · Shop Number · Monthly Rent · Account Status · Joining/Allotment Date. *(Agreement details are out of current scope.)*
+**Profile fields:** User ID · Full Name · Father/Husband Name · Mobile Number · Email (if required) · Address · PAN Number · GST Number (optional) · Profile Picture · Property ID · Shop Number and address · Monthly Rent · Account Status · Joining/Allotment Date. *(Agreement details are out of current scope.)*
 
 **Rules:** One user holds exactly one assigned property/shop; the user cannot edit their own profile — only an authorized admin can; sensitive fields are access-controlled.
 
