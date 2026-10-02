@@ -1,6 +1,10 @@
 import "dotenv/config";
 import app from "./app.js";
 const port = Number(process.env.PORT ?? 4000);
+ 
+//Middlewere for docker 
+app.use(express.static("public"))
+
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
 });
