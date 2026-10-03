@@ -1,33 +1,44 @@
-import { Pool } from "pg";
+import pg from "pg";
 import dotenv from "dotenv";
 
 dotenv.config();
 
-const pool = new Pool(
-  process.env.DATABASE_URL
-    ? { connectionString: process.env.DATABASE_URL }
-    : {
-        host: process.env.DB_HOST || "localhost",
-        port: Number(process.env.DB_PORT) || 5432,
-        user: process.env.DB_USER || "postgres",
-        password: process.env.DB_PASSWORD || "@bhavesh2006",
-        database: process.env.DB_DATABASE || "govt_project",
-      }
-);
+const { Pool } = pg;
 
-async function getdata() {
-  try {
-    const res = await pool.query("select * from admin_register");
-    for (let i = 0; i < res.rows.length; i++) {
-      console.log(res.rows[i]?.admin_id);
-      const data = { admin_id: res.rows[i]?.password };
-      console.log(data);
+const pool = new Pool({
+    host: process.env.DB_HOST,
+    port: Number(process.env.DB_PORT || 5432),
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_DATABASE,
+
+    // AWS RDS PostgreSQL requires SSL
+    ssl: {
+        rejectUnauthorized: false,
+
+    },
+});
+
+pool.on("connect", () => {
+    console.log("✅ PostgreSQL connected successfully");
+});
+
+pool.on("error", (error) => {
+    console.error("❌ PostgreSQL pool error:", error);
+});
+
+export const getdata = async () => {
+    try {
+        // const result = await pool.query("SELECT NOW() AS current_time");
+
+        console.log("✅ Database query successful");
+        // console.log(result.rows[0]);
+
+        // return result.rows;
+    } catch (error) {
+        console.error("❌ Database query failed:", error);
+        throw error;
     }
-  } catch (error) {
-    console.error("Database query failed:", error);
-  }
-}
-
-getdata();
+};
 
 export default pool;

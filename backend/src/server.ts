@@ -17,16 +17,17 @@ app.get("/health", (_request, response) => {
 app.get("/test-db", async (req, res) => {
   try {
     const result = await pool.query(`
-            SELECT
-                current_database() AS database,
-                NOW() AS server_time
+            SELECT * FROM public.users
+            ORDER BY id ASC 
         `);
 
     res.json({
       success: true,
-      message: "PostgreSQL connection successful",
-      database: result.rows[0].database,
-      server_time: result.rows[0].server_time
+     
+        message: "Users fetched successfully",
+        count: result.rowCount,
+        users: result.rows
+      // server_time: result.rows[0].server_time
     });
 
   } catch (error: any) {
