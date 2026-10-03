@@ -2,8 +2,9 @@ import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
-// import { env } from "./config/env.js";
 import dotenv from 'dotenv';
+import cookieParser from "cookie-parser";
+import authRoutes from "./routes/authRoutes.js";
 
 dotenv.config();
 const app = express();
@@ -22,6 +23,7 @@ app.use(
 
 // JSON request body read karne ke liye
 app.use(express.json());
+app.use(cookieParser());
 
 // API rate limiter
 app.use(
@@ -34,6 +36,7 @@ app.use(
   })
 );
 
+app.use("/api/auth", authRoutes);
 // Health check API
 app.get("/api/health", (_req, res) => {
   res.status(200).json({
