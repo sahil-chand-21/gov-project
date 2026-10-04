@@ -9,11 +9,15 @@ export async function hashPassword(
 }
 
 export async function comparePassword(
-    password: string,
-    passwordHash: string
+  password: string,
+  passwordHash: string | null | undefined
 ): Promise<boolean> {
-    return bcrypt.compare(password, passwordHash);
-}
-
-
-//Login mein plaintext password database se compare nahi hota. bcrypt.compare() submitted password ko stored hash ke against verify karta hai.
+  if (!password || !passwordHash || typeof passwordHash !== "string") {
+    return false;
+  }
+  try {
+    return await bcrypt.compare(password, passwordHash);
+  } catch {
+    return false;
+  }
+}

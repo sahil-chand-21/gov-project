@@ -13,7 +13,7 @@ export interface AuthenticatedAdmin {
   email: string | null;
   role: "SUPER_ADMIN" | "SUB_ADMIN";
   status: "ACTIVE";
-  zone: string | null;
+  firstLogin: boolean;
   createdAt: string;
 }
 
@@ -55,7 +55,7 @@ export async function adminLogin({
     throw new AuthError("ACCOUNT_DISABLED", 401, "This account is inactive");
   }
 
-  await recordAdminLogin(admin.id);
+  await recordAdminLogin(admin.id, admin.sourceTable);
 
   return {
     id: admin.id,
@@ -64,7 +64,8 @@ export async function adminLogin({
     email: admin.email,
     role: admin.role,
     status: "ACTIVE",
-    zone: admin.zone,
+    firstLogin: admin.firstLogin,
     createdAt: admin.createdAt.toISOString(),
   };
 }
+

@@ -1,14 +1,8 @@
-<<<<<<< Updated upstream
 import pg from "pg";
 import dotenv from "dotenv";
-=======
-import "dotenv/config";
-import { Pool } from "pg";
->>>>>>> Stashed changes
 
-const connectionString = process.env.DATABASE_URL;
+dotenv.config();
 
-<<<<<<< Updated upstream
 const { Pool } = pg;
 
 const pool = new Pool({
@@ -45,29 +39,6 @@ export const getdata = async () => {
         console.error("❌ Database query failed:", error);
         throw error;
     }
-};
-=======
-if (!connectionString) {
-  throw new Error("DATABASE_URL is required");
-}
-
-const pool = new Pool({
-  connectionString,
-  max: 10,
-  idleTimeoutMillis: 30_000,
-  connectionTimeoutMillis: 5_000,
-});
->>>>>>> Stashed changes
-
-export const connectDB = async (): Promise<void> => {
-  const client = await pool.connect();
-
-  try {
-    await client.query("SELECT 1");
-    console.log("PostgreSQL connected successfully");
-  } finally {
-    client.release();
-  }
 };
 
 export default pool;
