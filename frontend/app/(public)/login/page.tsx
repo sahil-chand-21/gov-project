@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import ukLogo from "@/assets/logo2.png";
+import { apiFetch } from "@/lib/api";
 import {
     IconLock,
     IconPhone,
@@ -11,7 +12,6 @@ import {
     IconUser,
     IconEye,
     IconEyeOff,
-    IconKey,
     IconAlertCircle,
     IconCheck,
     IconShieldLock,
@@ -31,96 +31,72 @@ export default function LoginPage() {
     const [isLoading, setIsLoading] = useState(false);
     const [successMsg, setSuccessMsg] = useState("");
 
-    // Preset Super Admin credentials for testing
-    const SUPER_ADMIN_MOBILE = "9876543210";
-    const SUPER_ADMIN_PASS = "admin123";
-
-    // Preset Tenant credentials for testing
-    const TENANT_MOBILE = "9456712345";
-    const TENANT_PASS = "user123";
-
-    // Function to autofill admin test credentials
-    const autoFillSuperAdmin = () => {
-        setLoginMode("admin");
-        setIdentifier(SUPER_ADMIN_MOBILE);
-        setPassword(SUPER_ADMIN_PASS);
-        setErrorMsg("");
-    };
-
-    // Function to autofill tenant test credentials
-    const autoFillTenant = () => {
-        setLoginMode("user");
-        setIdentifier(TENANT_MOBILE);
-        setPassword(TENANT_PASS);
-        setErrorMsg("");
-    };
-
-    const handleLogin = (e: React.FormEvent) => {
+    const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         setErrorMsg("");
         setSuccessMsg("");
 
-        if (!identifier || !password) {
-            setErrorMsg("कृपया अपना मोबाइल नंबर/लॉगिन आईडी और पासवर्ड दर्ज करें।");
+        const cleanMobile = identifier.trim();
+
+        if (!cleanMobile || !password) {
+            setErrorMsg("कृपया अपना मोबाइल नंबर और पासवर्ड दर्ज करें।");
+            return;
+        }
+
+        if (loginMode === "user") {
+            setErrorMsg("किराएदार (Tenant) लॉगिन वर्तमान में विकासधीन है। कृपया प्रशासनिक (Admin) टैब से लॉगिन करें।");
             return;
         }
 
         setIsLoading(true);
 
-        setTimeout(() => {
-            setIsLoading(false);
+        try {
+            const response = await apiFetch("/api/auth/login", {
+                method: "POST",
+                body: JSON.stringify({
+                    mobile: cleanMobile,
+                    password: password,
+                }),
+                
+            });
 
-            // --- TENANT LOGIN: check tenant credentials FIRST (works on any tab) ---
-            if (
-                loginMode === "user" ||
-                identifier === TENANT_MOBILE
-            ) {
-                setSuccessMsg("किराएदार लॉगिन सफल! किराएदार पोर्टल पर ले जाया जा रहा है...");
-                if (typeof window !== "undefined") {
-                    localStorage.setItem("userRole", "TENANT");
-                    localStorage.setItem("userName", identifier === TENANT_MOBILE ? "रमेश चंद्र जोशी" : identifier);
+            const data = await response.json();
+
+            if (!response.ok || !data.success) {
+                const backendCode = data?.error?.code;
+                if (backendCode === "ACCOUNT_DISABLED") {
+                    setErrorMsg("यह प्रशासनिक खाता निष्क्रिय (Inactive) है। कृपया सुपर एडमिन से संपर्क करें।");
+                } else if (backendCode === "INVALID_CREDENTIALS") {
+                    setErrorMsg("अवैध मोबाइल नंबर या पासवर्ड। कृपया सही विवरण दर्ज करें।");
+                } else if (backendCode === "INVALID_REQUEST") {
+                    setErrorMsg("कृपया 10 से 15 अंकों का वैध मोबाइल नंबर और पासवर्ड दर्ज करें।");
+                } else {
+                    setErrorMsg(data?.error?.message || "लॉगिन विफल रहा। कृपया पुनः प्रयास करें।");
                 }
-                setTimeout(() => {
-                    router.push("/user");
-                }, 800);
                 return;
             }
 
-            // --- ADMIN LOGIN ---
-            if (loginMode === "admin") {
-                if (
-                    identifier === SUPER_ADMIN_MOBILE ||
-                    identifier.toLowerCase() === "admin" ||
-                    identifier.toLowerCase() === "superadmin"
-                ) {
-                    if (password === SUPER_ADMIN_PASS || password === "admin") {
-                        setSuccessMsg("Super Admin प्रमाणीकरण सफल! प्रशासनिक पोर्टल पर रिडायरेक्ट किया जा रहा है...");
-                        if (typeof window !== "undefined") {
-                            localStorage.setItem("userRole", "SUPER_ADMIN");
-                            localStorage.setItem("userName", "Super Admin Almora");
-                        }
-                        setTimeout(() => {
-                            router.push("/admin");
-                        }, 800);
-                        return;
-                    } else {
-                        setErrorMsg("अवैध पासवर्ड! कृपया टेस्ट पासवर्ड 'admin123' का उपयोग करें।");
-                        return;
-                    }
-                } else {
-                    // Allow flexible admin login for testing
-                    setSuccessMsg("प्रशासनिक लॉगिन सफल! रिडायरेक्ट किया जा रहा है...");
-                    if (typeof window !== "undefined") {
-                        localStorage.setItem("userRole", "SUB_ADMIN");
-                        localStorage.setItem("userName", identifier);
-                    }
-                    setTimeout(() => {
-                        router.push("/admin");
-                    }, 800);
-                }
+            const admin = data.data.admin;
+            const roleTitle = admin.role === "SUPER_ADMIN" ? "Super Admin" : "Sub Admin";
+            setSuccessMsg(`${roleTitle} प्रमाणीकरण सफल! प्रशासनिक पोर्टल पर रिडायरेक्ट किया जा रहा है...`);
+
+            if (typeof window !== "undefined") {
+                localStorage.setItem("userRole", admin.role);
+                localStorage.setItem("userName", admin.fullName || roleTitle);
+                localStorage.setItem("userMobile", admin.mobile);
             }
-        }, 600);
+
+            setTimeout(() => {
+                router.push("/admin");
+            }, 600);
+        } catch (err) {
+            console.error("Login connection error:", err);
+            setErrorMsg("सर्वर से संपर्क करने में असमर्थ। कृपया जांचें कि बैकएंड सर्वर (Port 4000) सक्रिय है।");
+        } finally {
+            setIsLoading(false);
+        }
     };
+
 
     return (
         <div className="min-h-[calc(100vh-140px)] flex flex-col items-center justify-center bg-slate-900 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary-navy via-slate-900 to-slate-950 px-4 py-10 relative overflow-hidden font-sans">
@@ -144,63 +120,6 @@ export default function LoginPage() {
                     </p>
                 </div>
 
-                {/* Testing Super Admin Banner */}
-                <div className="p-3.5 rounded-2xl bg-amber-500/15 border border-amber-500/30 backdrop-blur-md shadow-lg text-amber-100">
-                    <div className="flex items-start gap-3">
-                        <div className="p-2 rounded-xl bg-amber-500/20 text-amber-300 shrink-0 mt-0.5">
-                            <IconKey className="h-4 w-4" />
-                        </div>
-                        <div className="flex-1 text-xs">
-                            <div className="font-bold text-amber-300 text-xs flex items-center justify-between">
-                                <span>Super Admin — त्वरित परीक्षण क्रेडेंशियल</span>
-                                <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/30 text-amber-200 font-mono">
-                                    TESTING DEMO
-                                </span>
-                            </div>
-                            <div className="mt-1 font-mono flex flex-wrap gap-x-4 text-[11px] text-amber-100/90">
-                                <span>मोबाइल: <strong className="text-white font-semibold">{SUPER_ADMIN_MOBILE}</strong></span>
-                                <span>पासवर्ड: <strong className="text-white font-semibold">{SUPER_ADMIN_PASS}</strong></span>
-                            </div>
-                            <button
-                                type="button"
-                                onClick={autoFillSuperAdmin}
-                                className="mt-2 w-full py-1.5 px-3 rounded-lg bg-orange hover:bg-orange/90 text-white font-semibold text-xs transition shadow-sm flex items-center justify-center gap-1.5 cursor-pointer"
-                            >
-                                <IconCheck className="h-4 w-4" />
-                                सुपर एडमिन लॉगिन स्वतः भरें (Auto-Fill Credentials)
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Testing Tenant Banner */}
-                <div className="p-3.5 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 backdrop-blur-md shadow-lg text-emerald-100">
-                    <div className="flex items-start gap-3">
-                        <div className="p-2 rounded-xl bg-emerald-500/20 text-emerald-300 shrink-0 mt-0.5">
-                            <IconUser className="h-4 w-4" />
-                        </div>
-                        <div className="flex-1 text-xs">
-                            <div className="font-bold text-emerald-300 text-xs flex items-center justify-between">
-                                <span>किराएदार / Tenant — त्वरित परीक्षण क्रेडेंशियल</span>
-                                <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/30 text-emerald-200 font-mono">
-                                    TENANT DEMO
-                                </span>
-                            </div>
-                            <div className="mt-1 font-mono flex flex-wrap gap-x-4 text-[11px] text-emerald-100/90">
-                                <span>मोबाइल: <strong className="text-white font-semibold">{TENANT_MOBILE}</strong></span>
-                                <span>पासवर्ड: <strong className="text-white font-semibold">{TENANT_PASS}</strong></span>
-                            </div>
-                            <button
-                                type="button"
-                                onClick={autoFillTenant}
-                                className="mt-2 w-full py-1.5 px-3 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition shadow-sm flex items-center justify-center gap-1.5 cursor-pointer"
-                            >
-                                <IconCheck className="h-4 w-4" />
-                                किराएदार लॉगिन स्वतः भरें (Auto-Fill Tenant)
-                            </button>
-                        </div>
-                    </div>
-                </div>
 
                 {/* Main Official Login Card */}
                 <div className="bg-white rounded-3xl shadow-2xl overflow-hidden p-6 sm:p-8 space-y-6 border border-slate-200">
